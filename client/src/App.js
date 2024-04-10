@@ -32,11 +32,8 @@ import SchoolLogin from './pages/schoolLogin';
 
 const App = () => {
   return (
-
     <>
-
       <BrowserRouter>
-      
         <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/homepage" element={<HomePage/>}/>

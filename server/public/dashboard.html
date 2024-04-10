@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .dashboard {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+      .bar-graph {
+        max-width: 800px;
+        max-height: 500px;
+        border: 1px solid #000;
+        margin: 10px;
+      }
+      nav {
+        width: 100%;
+        height: 50px;
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+    <div class="dashboard">
+      <canvas class="bar-graph" id="graph1"></canvas>
+      <canvas class="bar-graph" id="graph2"></canvas>
+      <canvas class="bar-graph" id="graph3"></canvas>
+      <canvas class="bar-graph" id="graph4"></canvas>
+      <canvas class="bar-graph" id="graph5"></canvas>
+    </div>
+    <script>
+      async function fetchDashboardData() {
+        var resData = [];
+        const data = await fetch("http://localhost:1337/api/getDashboardData");
+        const dataJson = await data.json();
+        resData = dataJson.data;
+        console.log(resData);
+      console.log(resData[0]); 
+      var ctx = document.getElementById("graph1").getContext("2d");
+      var myChart = new Chart(ctx, {
+        type: "bar",
+        data: resData[0],
+        options: {
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "District",
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "Schools",
+              },
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+      var ctx2 = document.getElementById("graph2").getContext("2d");
+
+      var myChart = new Chart(ctx2, {
+        type: "bar",
+        data:resData[1],
+        options: {
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "District",
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "Faculty",
+              },
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+      var ctx3 = document.getElementById("graph3").getContext("2d");
+
+      var myChart = new Chart(ctx3, {
+        type: "bar",
+        data: resData[2],
+        options: {
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "School",
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "Faculty",
+              },
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+      var ctx4 = document.getElementById("graph4").getContext("2d");
+
+      var myChart = new Chart(ctx4, {
+        type: "bar",
+        data: resData[3],
+        options: {
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "District",
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "Students",
+              },
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+      var ctx5 = document.getElementById("graph5").getContext("2d");
+
+      var myChart = new Chart(ctx5, {
+        type: "bar",
+        data: resData[4],
+        options: {
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "School",
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "Students",
+              },
+              beginAtZero: true,
+            },
+          },
+        },
+
+      });
+    }
+      fetchDashboardData();
+    </script>
+  </body>
+</html>
