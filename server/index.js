@@ -422,8 +422,6 @@ app.post("/api/video/:type/:id", cpUpload, async (req, res) => {
 app.get("/api/uploadedVideos/:type/:id", async (req, res) => {
   try {
     // headers: { Authorization: `Bearer ${token}` }
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, "secret13");
     const vi = await video.find({});
     res.status(200).json(vi);
   } catch (err) {
@@ -443,6 +441,9 @@ app.get("/api/getvideo/:type/:id", async (req, res) => {
 app.get("/api/getDashboardData", async (req, res) => {
   try {
     const districts = await District.find({});
+    const schools = await School.find({});
+    const facultys = await Faculty.find({});
+    const students = await Stud.find({});
     // there are 5 chart.js charts in the dashboard page
     // first chart is a bar chart showing the number of schools in each district
 
@@ -488,17 +489,12 @@ app.get("/api/getDashboardData", async (req, res) => {
       ],
     };
     // third chart is a bargraph showing the no of Faculty in each School
-    const noOfFacultyinSchool = await Promise.all( districts.map(async (d) => {
-        const schools = await School.find({ distid: d._id });
-        const count = await Promise.all(schools.map(async (s) => {
-            const count = await Faculty.countDocuments({ schoolid: s._id });
-            return count;
-        }));
-        return count;
-        }
-    ));
+    const noOfFacultyinSchool = await Promise.all(schools.map(async (s) => {
+        const count = await Faculty.countDocuments({ schoolid: s._id });
+      return count;
+    } ));
     const graph3Data = {
-      labels: districts.map((d) => d.name),
+      labels: schools.map((s) => s.name),
       datasets: [
         {
           label: "No of Faculty",
@@ -523,17 +519,12 @@ app.get("/api/getDashboardData", async (req, res) => {
       ],
     };
     // fifth chart is a bargraph showing the no of Students in each School
-    const noOfStudentsinSchool = await Promise.all( districts.map(async (d) => {
-        const schools = await School.find({ distid: d._id });
-        const count = await Promise.all(schools.map(async (s) => {
-            const count = await Stud.countDocuments({ schoolid: s._id });
-            return count;
-        }));
+    const noOfStudentsinSchool = await Promise.all(schools.map(async (s) => {
+        const count = await Stud.countDocuments({ schoolid: s._id });
         return count;
-        }
-    ));
+    }));
     const graph5Data = {
-      labels: districts.map((d) => d.name),
+      labels: schools.map((s) => s.name),
       datasets: [
         {
           label: "No of Students",
